@@ -8,9 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const nav = document.querySelector(".nav"),
         navList = nav.querySelectorAll("li"),
-        totalNavList = navList.length,
-        allSection = document.querySelectorAll(".section"),
-        totalSection = allSection.length;
+        allSection = document.querySelectorAll(".section");
 
     function removeBackSection() {
         allSection.forEach(section => section.classList.remove("back-section"));
@@ -111,5 +109,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.addEventListener("scroll", debounce(changeActiveSectionOnScroll));
 });
-
-console.log("Checking script execution...");
