@@ -932,14 +932,3 @@ h3.my-profession
     }
 }
 
-.nav a.active {
-    color: var(--skin-color);
-}
-
-.section.active {
-    display: block;
-}
-
-.section {
-    display: none;
-}
