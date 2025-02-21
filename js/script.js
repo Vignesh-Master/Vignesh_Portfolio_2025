@@ -1,96 +1,94 @@
-var typed = new Typed(".typing",{
-   strings: ["Network Engineer", "C++ Programmer", "Cloud Enthusiast", "SDN/SD-WAN Learner"],
-    typeSpeed:100,
-    BackSpeed:60,
-    loop:true
-})
+document.addEventListener("DOMContentLoaded", function () {
+  var typed = new Typed(".typing", {
+      strings: ["Network Engineer", "C++ Programmer", "Cloud Enthusiast", "SDN/SD-WAN Learner"],
+      typeSpeed: 100,
+      backSpeed: 60,
+      loop: true
+  });
 
-
-
-const nav = document.querySelector(".nav"),
+  const nav = document.querySelector(".nav"),
       navList = nav.querySelectorAll("li"),
       totalNavList = navList.length,
       allSection = document.querySelectorAll(".section"),
-      totalSection =allSection.length;
+      totalSection = allSection.length;
 
-      for(let i=0;i<totalNavList;i++)
-      {
-        const a = navList[i].querySelector("a");
-        a.addEventListener("click", function(){
+  function removeBackSection() {
+      allSection.forEach(section => section.classList.remove("back-section"));
+  }
 
-           removeBackSection();
-            for(let j=0;j<totalNavList;j++)
-            {
-                if(navList[j].querySelector("a").classList.contains("active"))
-                {   
-                    addBackSection(j);
-                   // allSection[j].classList.add("back-section");
-                }
-                navList[j].querySelector("a").classList.remove("active");
-            }
-            this.classList.add("active")
-            showSection(this);
-            if(window.innerWidth < 1200)
-            {
-                asideSectionTogglerBtn();
-            }
-        })
-      }
+  function addBackSection(num) {
+      allSection[num].classList.add("back-section");
+  }
 
-      function removeBackSection()
-      {
-        for(let i=0;i<totalSection; i++)
-        {
-            allSection[i].classList.remove("back-section");
-        }
-      }
-      function addBackSection(num)
-      {
-        allSection[num].classList.add("back-section");
-      }
-      function showSection(element)
-      {
-        for(let i=0; i<totalSection; i++){
-            allSection[i].classList.remove("active");
-        }
-        const target = element.getAttribute("href").split("#")[1];
-        document.querySelector("#" + target).classList.add("active");
-      }
-      function updateNav(element)
-      {
-        for(let i=0;i<totalNavList;i++)
-        {
-            navList[i].querySelector("a").classList.remove("active");
-            const target = element.getAttribute("href").split("#")[1];
-            if(target=== navList[i].querySelector("a").getAttribute("href").split("#")[1])
-            {
-                navList[i].querySelector("a").classList.add("active");
+  function showSection(element) {
+      allSection.forEach(section => section.classList.remove("active"));
+      const target = element.getAttribute("href").split("#")[1];
+      document.querySelector("#" + target).classList.add("active");
+  }
 
-            }
+  function updateNav(element) {
+      navList.forEach(item => item.querySelector("a").classList.remove("active"));
+      const target = element.getAttribute("href").split("#")[1];
+      navList.forEach(item => {
+          if (target === item.querySelector("a").getAttribute("href").split("#")[1]) {
+              item.querySelector("a").classList.add("active");
+          }
+      });
+  }
 
-        }
-      }
-      document.querySelector(".hire-me").addEventListener("click" , function(){
-        const sectionIndex = this.getAttribute("data-section-index");
+  navList.forEach((navItem, i) => {
+      const a = navItem.querySelector("a");
+      a.addEventListener("click", function (event) {
+          event.preventDefault();
+          removeBackSection();
+          if (navItem.querySelector("a").classList.contains("active")) {
+              addBackSection(i);
+          }
+          this.classList.add("active");
+          showSection(this);
+          if (window.innerWidth < 1200) {
+              asideSectionTogglerBtn();
+          }
+          updateNav(this);
+      });
+  });
 
-        showSection(this);
-        updateNav(this);
-        removeBackSection();
-        addBackSection(sectionIndex);
-      })
-      const navTogglerBtn = document.querySelector(".nav-toggler"),
+  document.querySelector(".hire-me").addEventListener("click", function () {
+      const sectionIndex = this.getAttribute("data-section-index");
+      showSection(this);
+      updateNav(this);
+      removeBackSection();
+      addBackSection(sectionIndex);
+  });
+
+  const navTogglerBtn = document.querySelector(".nav-toggler"),
       aside = document.querySelector(".aside");
-      navTogglerBtn.addEventListener("click", () =>
-    {
-        asideSectionTogglerBtn();
-    })
-    function asideSectionTogglerBtn()
-    {
-        aside.classList.toggle("open");
-        navTogglerBtn.classList.toggle("open");
-        for(let i=0; i<totalSection; i++)
-        {
-            allSection[i].classList.toggle("open");
-        }
-    }
-    
+  navTogglerBtn.addEventListener("click", asideSectionTogglerBtn);
+
+  function asideSectionTogglerBtn() {
+      aside.classList.toggle("open");
+      navTogglerBtn.classList.toggle("open");
+      allSection.forEach(section => section.classList.toggle("open"));
+  }
+
+  function changeActiveSectionOnScroll() {
+      let currentSection = "";
+      allSection.forEach((section) => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (window.scrollY >= sectionTop - sectionHeight / 3) {
+              currentSection = section.getAttribute("id");
+          }
+      });
+
+      navList.forEach((navItem) => {
+          const link = navItem.querySelector("a");
+          link.classList.remove("active");
+          if (link.getAttribute("href").includes(currentSection)) {
+              link.classList.add("active");
+          }
+      });
+  }
+
+  window.addEventListener("scroll", changeActiveSectionOnScroll);
+});
