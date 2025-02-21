@@ -5,27 +5,27 @@ document.addEventListener("DOMContentLoaded", function () {
         backSpeed: 60,
         loop: true
     });
-  
+
     const nav = document.querySelector(".nav"),
         navList = nav.querySelectorAll("li"),
         totalNavList = navList.length,
         allSection = document.querySelectorAll(".section"),
         totalSection = allSection.length;
-  
+
     function removeBackSection() {
         allSection.forEach(section => section.classList.remove("back-section"));
     }
-  
+
     function addBackSection(num) {
         allSection[num].classList.add("back-section");
     }
-  
+
     function showSection(element) {
         allSection.forEach(section => section.classList.remove("active"));
         const target = element.getAttribute("href").split("#")[1];
         document.querySelector("#" + target).classList.add("active");
     }
-  
+
     function updateNav(element) {
         navList.forEach(item => item.querySelector("a").classList.remove("active"));
         const target = element.getAttribute("href").split("#")[1];
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-  
+
     navList.forEach((navItem, i) => {
         const a = navItem.querySelector("a");
         a.addEventListener("click", function (event) {
@@ -50,27 +50,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 asideSectionTogglerBtn();
             }
             updateNav(this);
+            // Smooth scroll to the section
+            document.querySelector(this.getAttribute("href")).scrollIntoView({ behavior: 'smooth' });
         });
     });
-  
+
     document.querySelector(".hire-me").addEventListener("click", function () {
         const sectionIndex = this.getAttribute("data-section-index");
         showSection(this);
         updateNav(this);
         removeBackSection();
         addBackSection(sectionIndex);
+        // Smooth scroll to the section
+        document.querySelector(this.getAttribute("href")).scrollIntoView({ behavior: 'smooth' });
     });
-  
+
     const navTogglerBtn = document.querySelector(".nav-toggler"),
         aside = document.querySelector(".aside");
     navTogglerBtn.addEventListener("click", asideSectionTogglerBtn);
-  
+
     function asideSectionTogglerBtn() {
         aside.classList.toggle("open");
         navTogglerBtn.classList.toggle("open");
         allSection.forEach(section => section.classList.toggle("open"));
     }
-  
+
     function changeActiveSectionOnScroll() {
         let currentSection = "";
         allSection.forEach((section) => {
@@ -80,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentSection = section.getAttribute("id");
             }
         });
-  
+
         navList.forEach((navItem) => {
             const link = navItem.querySelector("a");
             link.classList.remove("active");
@@ -89,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-  
+
     function debounce(func, wait = 20, immediate = true) {
         let timeout;
         return function() {
@@ -104,8 +108,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (callNow) func.apply(context, args);
         };
     }
-  
+
     window.addEventListener("scroll", debounce(changeActiveSectionOnScroll));
-  });
-  
-  console.log("Checking script execution...");
+});
+
+console.log("Checking script execution...");
