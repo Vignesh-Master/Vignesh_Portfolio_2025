@@ -92,3 +92,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
   window.addEventListener("scroll", changeActiveSectionOnScroll);
 });
+
+console.log("Checking script execution...");
